@@ -1,11 +1,11 @@
 const ctrlWrapper = require("./ctrlWrapper");
 const handleMongooseError = require("./handleMongooseError");
-const isValidNoNull = require("./isValidNoNull");
+const isValidateNoNull = require("./isValidateNoNull");
 const setApiErrorStatus = require("./setApiErrorStatus");
 
 module.exports = {
   ctrlWrapper,
   handleMongooseError,
-  isValidNoNull,
+  isValidateNoNull,
   setApiErrorStatus,
 };

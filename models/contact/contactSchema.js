@@ -1,7 +1,6 @@
 const { Schema } = require("mongoose");
 const { handleMongooseError } = require("../../helpers");
-
-const emailRegexp = /^(\+)?([- ()]?\d[- ()]?){10,14}$/;
+const { EMAIL_REGEXP, PHONE_REGEXP } = require("../regexp");
 
 const contactSchema = Schema(
   {
@@ -14,19 +13,24 @@ const contactSchema = Schema(
     },
     email: {
       type: String,
+      match: new RegExp(EMAIL_REGEXP),
       required: [true, "Add email for contact"],
       unique: true,
-      lowercase: true,
       trim: true,
     },
     phone: {
       type: String,
-      match: emailRegexp,
+      match: new RegExp(PHONE_REGEXP),
       trim: true,
     },
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
     },
   },
   { versionKey: false, timestamps: true }

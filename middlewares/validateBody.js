@@ -1,6 +1,6 @@
 const { setApiErrorStatus } = require("../helpers");
 
-const validationBody = (schema) => {
+const validateBody = (schema) => {
   const func = (req, _, next) => {
     const { body } = req;
 
@@ -16,4 +16,4 @@ const validationBody = (schema) => {
   return func;
 };
 
-module.exports = validationBody;
+module.exports = validateBody;

@@ -1,12 +1,15 @@
 const { contactsService } = require("../../services");
-const { isValidNoNull } = require("../../helpers");
+const { isValidateNoNull } = require("../../helpers");
 
 const getByIdContact = async (req, res) => {
-  const { contactId } = req.params;
+  const {
+    params: { contactId },
+    user: { _id: owner },
+  } = req;
 
-  const result = await contactsService.getOneContact(contactId);
+  const result = await contactsService.getOneContact(contactId, owner);
 
-  res.json(isValidNoNull(result));
+  res.json(isValidateNoNull(result));
 };
 
 module.exports = getByIdContact;

@@ -1,12 +1,14 @@
 const { contactsService } = require("../../services");
-const { isValidNoNull } = require("../../helpers");
+const { isValidateNoNull } = require("../../helpers");
 
 const deleteByIdContact = async (req, res) => {
-  const { contactId } = req.params;
+  const {
+    params: { contactId },
+    user: { _id: owner },
+  } = req;
 
-  const result = await contactsService.removeContact(contactId);
-
-  await isValidNoNull(result);
+  const result = await contactsService.removeContact(contactId, owner);
+  await isValidateNoNull(result);
 
   res.json(`Contact by 'Id' - '${contactId}' deleted`);
 };
