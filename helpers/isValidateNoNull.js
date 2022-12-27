@@ -1,6 +1,6 @@
 const setApiErrorStatus = require("./setApiErrorStatus");
 
-const isValidNoNull = (result) => {
+const isValidateNoNull = (result) => {
   if (!result) {
     throw setApiErrorStatus(404);
   }
@@ -8,4 +8,4 @@ const isValidNoNull = (result) => {
   return result;
 };
 
-module.exports = isValidNoNull;
+module.exports = isValidateNoNull;

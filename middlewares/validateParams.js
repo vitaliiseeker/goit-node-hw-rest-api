@@ -1,6 +1,6 @@
 const { setApiErrorStatus } = require("../helpers");
 
-const validationParams = (schema) => {
+const validateParams = (schema) => {
   const func = (req, _, next) => {
     const {
       params: { contactId },
@@ -21,4 +21,4 @@ const validationParams = (schema) => {
   return func;
 };
 
-module.exports = validationParams;
+module.exports = validateParams;

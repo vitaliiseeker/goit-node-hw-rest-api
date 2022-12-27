@@ -1,21 +1,22 @@
 const { contactsService } = require("../../services");
-const { isValidNoNull, setApiErrorStatus } = require("../../helpers");
+const { isValidateNoNull, setApiErrorStatus } = require("../../helpers");
 
 const updateByIdStatusContact = async (req, res) => {
   const {
-    body: { favorite },
     params: { contactId },
+    user: { _id: owner },
+    body: { favorite },
   } = req;
 
   if (favorite === undefined) {
     return setApiErrorStatus(400, "Missing field favorite");
   }
 
-  const result = await contactsService.updateStatusContact(contactId, {
+  const result = await contactsService.updateContact(contactId, owner, {
     favorite,
   });
 
-  res.json(isValidNoNull(result));
+  res.json(isValidateNoNull(result));
 };
 
 module.exports = updateByIdStatusContact;
