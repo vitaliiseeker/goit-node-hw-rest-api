@@ -1,4 +1,4 @@
-const { setApiErrorStatus } = require("../helpers");
+const { handleMongooseError } = require("../helpers");
 
 const validateBody = (schema) => {
   const func = (req, _, next) => {
@@ -7,7 +7,7 @@ const validateBody = (schema) => {
     const { error } = schema.validate(body, { abortEarly: false });
 
     if (error) {
-      next(setApiErrorStatus(400, error.message));
+      next(handleMongooseError(error, _, next));
     }
 
     next();

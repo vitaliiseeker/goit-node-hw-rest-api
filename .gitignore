@@ -27,3 +27,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode
+
+# The VSCode REST client file is used to test HTTP requests
+REST Client.http

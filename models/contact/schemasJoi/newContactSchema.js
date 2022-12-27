@@ -1,10 +1,13 @@
 const Joi = require("joi");
-const { EMAIL_REGEXP, PHONE_REGEXP } = require("../../regexp");
+const { PHONE_REGEXP } = require("../../regexp");
 
-const newContactSchema = Joi.object({
+const newContactSchema = Joi.object().keys({
   name: Joi.string().min(2).max(40).required(),
 
-  email: Joi.string().pattern(new RegExp(EMAIL_REGEXP)).required(),
+  email: Joi.string().email({
+      minDomainSegments: 2,
+      tlds: { allow: false },
+    }).required(),
 
   phone: Joi.string().pattern(new RegExp(PHONE_REGEXP)),
 

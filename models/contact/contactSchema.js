@@ -13,9 +13,9 @@ const contactSchema = Schema(
     },
     email: {
       type: String,
-      match: new RegExp(EMAIL_REGEXP),
       required: [true, "Add email for contact"],
       unique: true,
+      lowercase: true,
       trim: true,
     },
     phone: {
