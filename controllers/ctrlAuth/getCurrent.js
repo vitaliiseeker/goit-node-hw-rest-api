@@ -1,5 +1,3 @@
-const { authService } = require("../../services");
-
 const getCurrent = async (req, res) => {
   const { email, subscription } = req.user;
 

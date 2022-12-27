@@ -1,6 +1,6 @@
 const { Schema } = require("mongoose");
 const { handleMongooseError } = require("../../helpers");
-const { EMAIL_REGEXP, PHONE_REGEXP } = require("../regexp");
+const { PHONE_REGEXP } = require("../regexp");
 
 const contactSchema = Schema(
   {

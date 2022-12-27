@@ -39,12 +39,14 @@
 ```
 ### Відповідь на помилку:
 
-**Приклад відповіді:** не валідний `"password": "exa7$mpless"`, не відповідає шаблону
+**Приклад відповіді:** не валідний `"password": "exa7$mpless"`, не відповідає вимогам
 
 **Код:** `400 Bad Request`
 
 ```json
-  "message": "\"password\" with value \"exa7$mpless\" fails to match the required pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^ws]).{6,}$/"
+ {
+    "message": "The password must consist of Latin letters (A-z), Arabic numerals (0-9) and special characters, the literal part of the password must contain both lowercase and uppercase letters, the length of the password must be at least 8 and no more than 16 characters"
+ }
 ```
 
 **Приклад відповіді:** користувач з таким `"email"` вже існує
@@ -87,12 +89,14 @@
 ```
 ### Відповідь на помилку:
 
-**Приклад відповіді:** не валідний `"password": "exa7$mpless"`, не відповідає шаблону
+**Приклад відповіді:** не валідний `"password": "exa7$mpless"`, не відповідає вимогам
 
 **Код:** `400 Bad Request`
 
 ```json
-  "message": "\"password\" with value \"exa7$mpless\" fails to match the required pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^ws]).{6,}$/"
+{
+ "message": "The password must consist of Latin letters (A-z), Arabic  numerals (0-9) and special characters, the literal part of the password must contain both lowercase and uppercase letters, the length of the password  must be at least 8 and no more than 16 characters"
+}
 ```
 
 **Приклад відповіді:** не вірне значення `"password"`
