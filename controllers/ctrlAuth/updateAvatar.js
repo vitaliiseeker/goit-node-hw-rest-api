@@ -3,7 +3,6 @@ const path = require("path");
 const { authService } = require("../../services");
 const { formatingAvatar } = require("../../helpers");
 
-
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
