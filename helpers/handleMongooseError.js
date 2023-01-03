@@ -13,6 +13,12 @@ const handleMongooseError = (error, doc, next) => {
     next(setApiErrorStatus(400, "The password must consist of Latin letters (A-z), Arabic numerals (0-9) and special characters, the literal part of the password must contain both lowercase and uppercase letters, the length of the password must be at least 8 and no more than 16 characters"));
   }
 
+  if (message.includes("subscription")) {
+    next(setApiErrorStatus(409, `Subscription must be one of the list: [starter, pro, business]`));
+  }
+
+
+
   next();
 };
 

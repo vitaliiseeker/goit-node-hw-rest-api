@@ -6,10 +6,11 @@ const {
   logout,
   getCurrent,
   updateSubscription,
+  updateAvatar,
 } = require("../controllers/ctrlAuth");
 
 const { ctrlWrapper } = require("../helpers");
-const { authenticate, validateBody } = require("../middlewares");
+const { authenticate, validateBody, upload } = require("../middlewares");
 const {
   registerSchema,
   loginSchema,
@@ -32,5 +33,7 @@ router.patch(
   validateBody(updateSubscriptionSchema),
   ctrlWrapper(updateSubscription)
 );
+
+router.patch("/avatars", authenticate, upload.single("avatar"), ctrlWrapper(updateAvatar));
 
 module.exports = router;

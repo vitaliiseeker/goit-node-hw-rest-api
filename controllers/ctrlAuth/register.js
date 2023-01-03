@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const gravatar = require('gravatar');
 const { authService } = require("../../services");
 const { setApiErrorStatus } = require("../../helpers");
 
@@ -13,10 +14,12 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
+  const avatarURL = `${gravatar.url(email)}.?s=250`;
 
   const newUser = await authService.addUser({
     ...body,
     password: hashPassword,
+    avatarURL,
   });
 
   res.status(201).json({
@@ -24,6 +27,7 @@ const register = async (req, res) => {
       email: newUser.email,
       password: newUser.password,
       subscription: newUser.subscription,
+      avatarURL: newUser.avatarURL,
     },
   });
 };
