@@ -229,7 +229,7 @@
 ---
 <a name="updateAvatar"><h2>Оновлення аватару користувача</h2></a>
 
-**URL:** `/api/users/avatars`
+**URL:** `/api/users/avatars/`
 
 **Метод:** `PATCH`
 
