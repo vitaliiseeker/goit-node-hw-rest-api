@@ -3,6 +3,7 @@ const logger = require("morgan");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+require("dotenv").config();
 
 const { authRouter } = require("./routes");
 const { contactsRouter } = require("./routes");
@@ -20,6 +21,7 @@ app.use(logger("combined", { stream: accessLogStream }));
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static("public"));
 
 app.use("/api/users", authRouter);
 app.use("/api/contacts", contactsRouter);
