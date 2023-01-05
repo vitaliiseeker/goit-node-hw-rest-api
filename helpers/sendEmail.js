@@ -9,7 +9,7 @@ const sendEmail = async (data) => {
     ...data,
     from: FROM_BASE_EMAIL,
   };
-  console.log(email);
+
   await sgMail.send(email);
 
   return true;
