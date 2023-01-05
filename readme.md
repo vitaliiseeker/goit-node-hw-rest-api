@@ -1,8 +1,10 @@
 # REST API Документація
 
-## Ендпоінти для роботи з колекцією контактів
+## Ендпоінти для роботи з колекцією користувача
 
 - [Реєстрація користувача:](#register) `POST /api/users/register/`
+- [Верифікація email користувача:](#verificationToken) `GET /api/users/verify/:verificationToken/`
+- [Запит на отримання повторного посилання для верифікації email користувача:](#resendVerifyEmail) `POST /api/users//verify/`
 - [Одержання токена для авторизації - логін:](#login) `POST /api/users/login/`
 - [Видалення токена - логаут:](#logout) `POST /api/users/logout/`
 - [Поточний користувач - отримати дані за токеном:](#getCurrent) `GET /api/users/current/`
@@ -59,11 +61,94 @@
 ```
 
 ---
+<a name="verificationToken"><h2>Верифікація email користувача</h2></a>
+
+**URL:** `/api/users/verify/:verificationToken/`
+
+**Метод:** `GET`
+
+**Приклад вмісту:** запит /api/users/verify/:verificationToken, який було надіслано на email, вказаний при реєстрації
+
+### Успішна відповідь:
+
+**Код:** `200 OK`
+
+**Приклад вмісту**
+
+```json
+{
+   "message": "Verification successful"
+}
+```
+### Відповідь на помилку:
+
+**Приклад відповіді:** користувача з таким verificationToken не знайдено
+
+**Код:** `404 Not Found`
+
+```json
+{
+  "message": "User not found"
+}
+```
+
+---
+<a name="resendVerifyEmail"><h2>Запит на отримання повторного посилання для верифікації email користувача</h2></a>
+
+**URL:** `/api/users/verify/`
+
+**Метод:** `POST`
+
+**Приклад вмісту:** для запиту з наступними даними
+
+```json
+{
+   "email": "example3@gmail.com"
+}
+```
+
+### Успішна відповідь:
+
+**Код:** `200 OK`
+
+**Приклад вмісту**
+
+```json
+{
+   "message": "Verification email sent"
+}
+```
+### Відповідь на помилку:
+
+**Приклад відповіді:** користувача з таким email не знайдено
+
+**Код:** `404 Not Found`
+
+```json
+{
+  "message": "User not found"
+}
+```
+
+**Приклад відповіді:** користувач вже пройшов верифікацію
+
+**Код:** `400 Bad Request`
+
+```json
+{
+  "message": "Verification has already been passed"
+}
+```
+
+---
 <a name="login"><h2>Одержання токена для авторизації - логін</h2></a>
 
 **URL:** `/api/users/login/`
 
 **Метод:** `POST`
+
+*Примітка: перед одержанням токену (логін), необхідно верифікувати email
+користувача.*
 
 **Приклад вмісту:** для запиту з наступними даними
 
@@ -271,7 +356,7 @@ RequestBody: *файл з новою аватаркою - avatar.png*
 
 ---
 
-**Використовуйте наступні запити для перегляду та редагування контактів:**
+## Ендпоінти для роботи з колекцією контактів користувача
 
 - [Отримати список всіх контактів:](#getContacts) `GET /api/contacts/`
 - [Отримати дані контакту:](#getContact) `GET /api/contacts/:id/`
@@ -615,12 +700,4 @@ RequestBody: *файл з новою аватаркою - avatar.png*
 ```
 
 ---
----
-## Free
-
----
-The code in this repository is not licensed in any way.
-
-Do what you want, [Unlicense dot org](http://unlicense.org/), spread the word.
-
 ---

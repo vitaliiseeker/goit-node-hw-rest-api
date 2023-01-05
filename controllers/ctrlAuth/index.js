@@ -1,15 +1,19 @@
-const register = require("./register");
+const getCurrent = require("./getCurrent");
 const login = require("./login");
 const logout = require("./logout");
-const getCurrent = require("./getCurrent");
-const updateSubscription = require("./updateSubscription");
+const register = require("./register");
+const resendVerifyEmail = require("./resendVerifyEmail");
 const updateAvatar = require("./updateAvatar");
+const updateSubscription = require("./updateSubscription");
+const verificationToken = require("./verificationToken");
 
 module.exports = {
-  register,
+  getCurrent,
   login,
   logout,
-  getCurrent,
-  updateSubscription,
+  register,
+  resendVerifyEmail,
   updateAvatar,
+  updateSubscription,
+  verificationToken,
 };
