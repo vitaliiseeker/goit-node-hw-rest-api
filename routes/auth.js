@@ -2,6 +2,8 @@ const express = require("express");
 
 const {
   register,
+  verificationToken,
+  resendVerifyEmail,
   login,
   logout,
   getCurrent,
@@ -15,11 +17,16 @@ const {
   registerSchema,
   loginSchema,
   updateSubscriptionSchema,
+  verifyEmailSchema,
 } = require("../models/user/schemasJoi");
 
 const router = new express.Router();
 
 router.post("/register", validateBody(registerSchema), ctrlWrapper(register));
+
+router.get("/verify/:verificationToken", ctrlWrapper(verificationToken));
+
+router.post("/verify", validateBody(verifyEmailSchema), ctrlWrapper(resendVerifyEmail));
 
 router.post("/login", validateBody(loginSchema), ctrlWrapper(login));
 
