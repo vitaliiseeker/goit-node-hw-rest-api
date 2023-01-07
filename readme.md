@@ -36,7 +36,6 @@
 ```json
 {
    "email": "example3@gmail.com",
-   "password": "$2b$10$MQs6///0fiJGJJ9qJDxfi.vFKZ1dpRWFYKejnPHWLZJl.ZCmmiLOO",
    "subscription": "starter"
 }
 ```
