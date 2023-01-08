@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const {  PASSWORD_REGEXP } = require("../../regexp");
+const { PASSWORD_REGEXP } = require("../../regexp");
 
 const registerSchema = Joi.object({
   email: Joi.string().email({

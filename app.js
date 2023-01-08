@@ -4,6 +4,9 @@ const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDoc = require('./swagger.json');
+
 const { authRouter } = require("./routes");
 const { contactsRouter } = require("./routes");
 
@@ -24,6 +27,7 @@ app.use(express.static("public"));
 
 app.use("/api/users", authRouter);
 app.use("/api/contacts", contactsRouter);
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
