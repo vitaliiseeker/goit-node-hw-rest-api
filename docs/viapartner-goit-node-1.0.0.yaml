@@ -1,0 +1,584 @@
+---
+openapi: 3.0.0
+info:
+  title: API Documentation
+  description: REST API // goit-node-hw-rest-api
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/viapartner/goit-node/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: http://{userNameHost}:{port}/{basePath}
+  description: API server
+  variables:
+    userNameHost:
+      default: localhost
+    port:
+      default: "3000"
+    basePath:
+      default: api
+tags:
+- name: auth
+  description: Users controller
+- name: contacts
+  description: Contacts controller
+paths:
+  /users/register:
+    post:
+      tags:
+      - auth
+      summary: User registration
+      description: |
+        *Note: The password must consist of letters of the Latin alphabet (A-z), Arabic numbers (0-9) and special characters, the letter part of the password must contain both lower and uppercase letters, the length of the password must be at least 8 and no more than 16 characters.*
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        "400":
+          description: Bad Request / Validation error
+        "409":
+          description: Conflict / Email in use
+  /users/verify/{verificationToken}:
+    get:
+      tags:
+      - auth
+      summary: User verification
+      parameters:
+      - name: verificationToken
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Verification successful
+        "404":
+          description: User not found
+        "409":
+          description: Conflict / Email in use
+  /users/verify:
+    post:
+      tags:
+      - auth
+      summary: Resend verify email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendVerifyEmailRequest'
+        required: true
+      responses:
+        "200":
+          description: Verification email sent
+        "400":
+          description: Verification has already been passed
+        "404":
+          description: User not found
+  /users/login:
+    post:
+      tags:
+      - auth
+      summary: Login - obtaining a token for authorization
+      description: |
+        *Note: before receiving a token (login), you need to verify your email user.*
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      responses:
+        "200":
+          description: Login succesess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        "400":
+          description: Bad Request / Validation error
+        "401":
+          description: Unauthorized / Password invalid
+  /users/logout:
+    post:
+      tags:
+      - auth
+      summary: Logout - deleting a token
+      responses:
+        "204":
+          description: Logout success
+        "401":
+          description: Not authorized
+      security:
+      - Bearer: []
+  /users/current:
+    get:
+      tags:
+      - auth
+      summary: Get current
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        "401":
+          description: Not authorized
+      security:
+      - Bearer: []
+  /users:
+    patch:
+      tags:
+      - auth
+      summary: Updating a user's subscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSubscriptionRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        "400":
+          description: Bad Request
+        "401":
+          description: Not authorized
+      security:
+      - Bearer: []
+  /users/avatars:
+    patch:
+      tags:
+      - auth
+      summary: Updating user avatar
+      requestBody:
+        content:
+          image/*:
+            schema:
+              type: string
+              format: binary
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateAvatarResponse'
+        "401":
+          description: Not authorized
+      security:
+      - Bearer: []
+  /contacts:
+    get:
+      tags:
+      - contacts
+      summary: Get contacts
+      parameters:
+      - name: page
+        in: query
+        description: Page number
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          default: 1
+      - name: limit
+        in: query
+        description: The number of elements on the page
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          default: 20
+      - name: sort
+        in: query
+        description: The name of the field by which sorting will be performed
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: name
+      - name: order
+        in: query
+        description: |
+          Sort order:
+           * `asc` - Ascending, from A to Z
+           * `desc` - Descending, from Z to A
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: asc
+      - name: \name_field=value_field\
+        in: query
+        description: The name of the field and the value by which the search and filtering will be performed
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactsResponse'
+        "204":
+          description: Not Content
+        "401":
+          description: Not authorized
+      security:
+      - Bearer: []
+    post:
+      tags:
+      - contacts
+      summary: Add a new contact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactRequest'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactOwnerIdResponse'
+        "400":
+          description: Bad Request / Validation error
+        "401":
+          description: Not authorized
+      security:
+      - Bearer: []
+  /contacts/{_id}:
+    get:
+      tags:
+      - contacts
+      summary: Get contact
+      parameters:
+      - name: _id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactOwnerUserResponse'
+        "401":
+          description: Not authorized
+        "404":
+          description: Bad Request / Validation error
+      security:
+      - Bearer: []
+    put:
+      tags:
+      - contacts
+      summary: Update contact
+      parameters:
+      - name: _id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: |
+          *Note: It is not necessary to update all fields, you can update only the transferred fields with data.*
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactUpdateRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactOwnerIdResponse'
+        "400":
+          description: Bad Request / Validation error
+        "401":
+          description: Not authorized
+      security:
+      - Bearer: []
+    delete:
+      tags:
+      - contacts
+      summary: Delete contact
+      parameters:
+      - name: _id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example: Contact by "Id" - "639a5561e150fa0f00310f9f" deleted
+        "401":
+          description: Not authorized
+        "404":
+          description: Not Found
+      security:
+      - Bearer: []
+  /contacts/{_id}/favorite:
+    patch:
+      tags:
+      - contacts
+      summary: Update contact status
+      parameters:
+      - name: _id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactUpdateStatusRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactOwnerIdResponse'
+        "400":
+          description: Bad Request / Validation error
+        "401":
+          description: Not authorized
+      security:
+      - Bearer: []
+components:
+  schemas:
+    UserRequest:
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          uniqueItems: true
+          type: string
+          format: email
+        password:
+          maxLength: 16
+          minLength: 8
+          pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^ws]).{8,16}$
+          type: string
+          format: password
+          writeOnly: true
+    UserResponse:
+      required:
+      - email
+      - subscription
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        subscription:
+          type: string
+          enum:
+          - starter
+          - pro
+          - business
+    ResendVerifyEmailRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+    LoginResponse:
+      required:
+      - token
+      - user
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYjYxMzRhMzdmZGFiMGM3OGMyNTY0MSIsImlhdCI6MTY3Mjk2NDU5MCwiZXhwIjoxNjczMDUwOTkwfQ.L1jfmJO3Wq1Q5O7HLqxR7x5LvWlG6yhCQZHJOLhSn-w
+        user:
+          $ref: '#/components/schemas/UserResponse'
+    UpdateSubscriptionRequest:
+      required:
+      - subscription
+      type: object
+      properties:
+        subscription:
+          type: string
+          enum:
+          - starter
+          - pro
+          - business
+    UpdateAvatarResponse:
+      required:
+      - avatarURL
+      type: object
+      properties:
+        avatarURL:
+          type: string
+          example: avatars\63b8b2ddba750c212cacc8a2_avatars_1.png
+    ContactRequest:
+      required:
+      - email
+      - name
+      - phone
+      type: object
+      properties:
+        name:
+          maxLength: 40
+          minLength: 2
+          type: string
+          example: Thomas Lucas
+        email:
+          type: string
+          format: email
+        phone:
+          pattern: ^([+])?([- (]?[0-9][- )]?){10,14}$
+          type: string
+          example: (093) 765-43-21
+        favorite:
+          type: boolean
+          default: false
+    ContactResponse:
+      required:
+      - _id
+      - email
+      - favorite
+      - name
+      - phone
+      type: object
+      properties:
+        _id:
+          type: string
+          readOnly: true
+          example: 63a512799d819e19947d0a4c
+        name:
+          maxLength: 40
+          minLength: 2
+          type: string
+          example: Thomas Lucas
+        email:
+          type: string
+          format: email
+        phone:
+          pattern: ^([+])?([- (]?[0-9][- )]?){10,14}$
+          type: string
+          example: +38 (099) 123-45-(67)
+        favorite:
+          type: boolean
+          example: true
+          default: false
+    ContactOwnerIdResponse:
+      allOf:
+      - $ref: '#/components/schemas/ContactResponse'
+      - $ref: '#/components/schemas/Owner'
+      - $ref: '#/components/schemas/DateResponse'
+    ContactOwnerUserResponse:
+      allOf:
+      - $ref: '#/components/schemas/ContactResponse'
+      - type: object
+        properties:
+          owner:
+            $ref: '#/components/schemas/UserResponse'
+      - $ref: '#/components/schemas/DateResponse'
+    ContactsResponse:
+      required:
+      - data
+      - page
+      - per_page
+      - total
+      type: object
+      properties:
+        page:
+          type: number
+          example: 2
+        per_page:
+          type: number
+          example: 10
+        total:
+          type: number
+          example: 36
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactResponse'
+    ContactUpdateRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        phone:
+          pattern: ^([+])?([- (]?[0-9][- )]?){10,14}$
+          type: string
+          example: (093) 765-43-21
+    ContactUpdateStatusRequest:
+      required:
+      - favorite
+      type: object
+      properties:
+        favorite:
+          type: boolean
+    Owner:
+      type: object
+      properties:
+        owner:
+          type: string
+          readOnly: true
+          example: 63b6132237fdab0c78c2563e
+    DateResponse:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

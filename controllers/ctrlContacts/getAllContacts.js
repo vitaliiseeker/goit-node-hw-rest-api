@@ -21,7 +21,7 @@ const getAllContacts = async (req, res) => {
   );
 
   if (count && data.length) {
-    return res.json({ page, per_page: limit, total: count, data });
+    return res.json({ page: +page, per_page: +limit, total: count, data });
   }
 
   res.status(204).json({ message: "No Content" });
